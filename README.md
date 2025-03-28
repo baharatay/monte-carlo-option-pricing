@@ -41,6 +41,7 @@ The Monte Carlo price converges closely to the analytical solution, validating t
 ## Visualization
 
 The figure attached shows 100 of the 10,000 simulated stock price paths over one year.
+![Simulated Stock Paths](myplot.png)
 *Monte Carlo simulated stock prices using geometric Brownian motion.*
 
 ---
