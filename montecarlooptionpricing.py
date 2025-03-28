@@ -1,6 +1,6 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 # Parameters
 S0 = 100    # Initial stock price
@@ -20,13 +20,6 @@ for t in range(1, num_steps):  # Loop through time steps
     Z = np.random.standard_normal(num_simulations)  # Generate random normal values
     stock_paths[t] = stock_paths[t-1] * np.exp((r - 0.5 * sigma ** 2) * dt + sigma * np.sqrt(dt) * Z)
 
-plt.figure(figsize=(10,5))
-plt.plot(stock_paths[:, :100], lw=1, alpha=0.6)  # Plot 100 paths
-plt.xlabel("Time Steps")
-plt.ylabel("Stock Price")
-plt.title("Monte Carlo Simulated Stock Prices")
-plt.show()
-
 # Final stock prices at maturity
 final_prices = stock_paths[-1]
 
@@ -37,3 +30,16 @@ payoffs = np.maximum(final_prices - K, 0)
 option_price = np.exp(-r * T) * np.mean(payoffs)
 print(f"Estimated European Call Option Price: ${option_price:.2f}")
 
+# Black-Scholes analytical price for cross-checking
+d1 = (np.log(S0 / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+d2 = d1 - sigma * np.sqrt(T)
+bs_price = S0 * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+print(f"Black-Scholes Analytical Price: ${bs_price:.2f}")
+
+# plot the simulated paths
+plt.figure(figsize=(10,5))
+plt.plot(stock_paths[:, :100], lw=1, alpha=0.6)  # Plot 100 paths
+plt.xlabel("Time Steps")
+plt.ylabel("Stock Price")
+plt.title("Monte Carlo Simulated Stock Prices")
+plt.show()
